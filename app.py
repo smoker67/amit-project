@@ -109,5 +109,19 @@ else:
         """,
         unsafe_allow_html=True
     )
-    
+    if  budget< 0 or budget > 999999999999999999999999999999999999999999999999999999999999999999:
+    st.error("❌ התקציב חייב להיות בין 1 ל-999999999999999999999999999999999999999999999999999999999999999999")
+
+else:
+    st.success("✅ תקציב תקין")
+
+    st.markdown(
+        f"""
+        <div class="result">
+            💰 ההכנסות החזויות הן<br>
+            {prediction:,.2f}$
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 

@@ -54,7 +54,7 @@ st.markdown(
 )
 
 st.markdown(
-    '<div class="subtitle">תן לי דירוג ממוצע של סרט ואני אחזה לך כמה הכנסות יש לו</div>',
+    '<div class="subtitle">תן לי דירוג ממוצע ותקציב התחלתי של סרט ואני אחזה לך כמה הכנסות יש לו</div>',
     unsafe_allow_html=True
 )
 
@@ -63,11 +63,11 @@ st.markdown(
 # -------------------------
 
 budget = st.number_input(
-    "⭐ הכנס את התקציב הממוצע",
+    "⭐ הכנס את התקציב ההתחלתי",
     min_value=0.0,
-    max_value=99999999999999999,
+    max_value=99999999999999999.0,
     value=5.0,
-    step=1000
+    step=1000.0
 )
 votes = st.number_input(
     "⭐ הכנס את הדירוג הממוצע",

@@ -61,7 +61,15 @@ st.markdown(
 # -------------------------
 # Input
 # -------------------------
-number = st.number_input(
+
+budget = st.number_input(
+    "⭐ הכנס את התקציב הממוצע",
+    min_value=0.0,
+    max_value=99999999999999999,
+    value=5.0,
+    step=1000
+)
+votes = st.number_input(
     "⭐ הכנס את הדירוג הממוצע",
     min_value=1.0,
     max_value=10.0,
@@ -72,10 +80,16 @@ number = st.number_input(
 # -------------------------
 # Model
 # -------------------------
-w = 26876691.88746204
-b = -81476779.27700615
+w_budget = 17750549.77157962
+w_votes = 2.8742058244586395
 
-prediction = w * number + b
+b= -109360178.61238256
+
+
+prediction= budget*w_budget+votes*w_votes+b
+
+
+
 
 # -------------------------
 # Result

@@ -117,10 +117,6 @@ else:
 
     st.markdown(
         f"""
-        <div class="result">
-            💰 ההכנסות החזויות הן<br>
-            {prediction:,.2f}$
-        </div>
         """,
         unsafe_allow_html=True
     )

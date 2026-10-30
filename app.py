@@ -94,7 +94,7 @@ prediction= budget*w_budget+votes*w_votes+b
 # -------------------------
 # Result
 # -------------------------
-if number < 1 or number > 10:
+if  votes< 1 or votes > 10:
     st.error("❌ הדירוג חייב להיות בין 1 ל-10")
 
 else:
@@ -109,4 +109,5 @@ else:
         """,
         unsafe_allow_html=True
     )
+    
 

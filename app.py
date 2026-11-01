@@ -10,6 +10,8 @@ st.set_page_config(
     layout="centered"
 )
 
+st.header("amit project")
+
 # -------------------------
 # Model
 # -------------------------
@@ -81,6 +83,8 @@ if page == "חיזוי הכנסות":
         unsafe_allow_html=True
     )
 
+    # Input
+
     budget_text = st.text_input(
         "💰 הכנס את התקציב ההתחלתי",
         value="50000000"
@@ -94,6 +98,8 @@ if page == "חיזוי הכנסות":
         step=0.1
     )
 
+    # Validation
+
     try:
         budget = int(budget_text)
         budget_valid = 1 <= budget <= MAX_BUDGET
@@ -101,10 +107,14 @@ if page == "חיזוי הכנסות":
         budget = 0
         budget_valid = False
 
+    # Prediction
+
     if not budget_valid:
+
         st.error("❌ התקציב חייב להיות מספר שלם בין 1 למקסימום שהוגדר")
 
     else:
+
         prediction = budget * w_budget + votes * w_votes + b
 
         st.success("✅ הנתונים תקינים")
@@ -135,11 +145,14 @@ elif page == "🎮 נצח את המודל":
         unsafe_allow_html=True
     )
 
-    st.write("במשחק הזה אתה והמודל מנסים לחזות את ההכנסות של סרט.")
+    st.write(
+        "במשחק הזה אתה והמודל מנסים לחזות את ההכנסות של סרט."
+    )
 
     st.divider()
 
     # Movie data
+
     st.subheader("🎬 נתוני הסרט")
 
     game_budget_text = st.text_input(
@@ -167,15 +180,17 @@ elif page == "🎮 נצח את המודל":
     st.divider()
 
     # User guess
+
     st.subheader("🤔 מה לדעתך יהיו ההכנסות?")
 
     user_guess_text = st.text_input(
-        "הכנס את הניחוש שלך בדולרים",
+        "הכנס את הניחוש שלך בדולרים (אפשר גם מספר שלילי)",
         value="100000000",
         key="user_guess"
     )
 
     # Real revenue
+
     st.subheader("📊 מה היו ההכנסות האמיתיות?")
 
     real_revenue_text = st.text_input(
@@ -185,21 +200,26 @@ elif page == "🎮 נצח את המודל":
     )
 
     # Check button
+
     if st.button("🏆 בדוק מי ניצח!", use_container_width=True):
 
         try:
+
             user_guess = int(user_guess_text)
             real_revenue = int(real_revenue_text)
 
             if not game_budget_valid:
+
                 st.error("❌ התקציב חייב להיות מספר שלם וחיובי בטווח המותר")
 
-            elif user_guess < 0 or real_revenue < 0:
-                st.error("❌ ההכנסות והניחוש חייבים להיות חיוביים או אפס")
+            elif real_revenue < 0:
+
+                st.error("❌ ההכנסות האמיתיות לא יכולות להיות שליליות")
 
             else:
 
                 # Model prediction
+
                 model_prediction = (
                     game_budget * w_budget
                     + game_votes * w_votes
@@ -207,6 +227,7 @@ elif page == "🎮 נצח את המודל":
                 )
 
                 # Calculate errors
+
                 user_error = abs(user_guess - real_revenue)
 
                 model_error = abs(
@@ -220,6 +241,7 @@ elif page == "🎮 נצח את המודל":
                 col1, col2 = st.columns(2)
 
                 with col1:
+
                     st.metric(
                         "הניחוש שלך",
                         f"${user_guess:,.2f}",
@@ -227,6 +249,7 @@ elif page == "🎮 נצח את המודל":
                     )
 
                 with col2:
+
                     st.metric(
                         "תחזית המודל",
                         f"${model_prediction:,.2f}",
@@ -240,6 +263,7 @@ elif page == "🎮 נצח את המודל":
                 st.divider()
 
                 # Winner
+
                 if user_error < model_error:
 
                     st.balloons()
@@ -261,4 +285,7 @@ elif page == "🎮 נצח את המודל":
                     )
 
         except ValueError:
-            st.error("❌ יש להזין מספרים שלמים ותקינים בכל השדות")
+
+            st.error(
+                "❌ יש להזין מספרים שלמים ותקינים בכל השדות"
+            )

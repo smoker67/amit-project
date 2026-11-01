@@ -1,16 +1,9 @@
 
 import streamlit as st
 
-# -------------------------
-# Page settings
-# -------------------------
-st.set_page_config(
-    page_title="Movie Revenue Predictor",
-    page_icon="🎬",
-    layout="centered"
-)
+budget = st.number_input("הכנס תקציב לסרט")
+votes = st.number_input("הכנס דירוג ממוצע לסרט")
 
-st.header("amit project")
 
 # -------------------------
 # Model
@@ -19,273 +12,276 @@ w_budget = 17750549.77157962
 w_votes = 2.8742058244586395
 b = -109360178.61238256
 
-MAX_BUDGET = 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
-
-# -------------------------
-# Custom CSS
-# -------------------------
-st.markdown("""
-<style>
-    .main {
-        background-color: #f5f7fb;
-    }
-
-    .title {
-        text-align: center;
-        color: #1f2937;
-        font-size: 42px;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .subtitle {
-        text-align: center;
-        color: #6b7280;
-        font-size: 18px;
-        margin-bottom: 30px;
-    }
-
-    .result {
-        background-color: #e8f5e9;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: #166534;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# -------------------------
-# Navigation
-# -------------------------
-st.sidebar.title("🎬 Movie Project")
-
-page = st.sidebar.radio(
-    "בחר עמוד:",
-    ["חיזוי הכנסות", "🎮 נצח את המודל"]
-)
-
-# =================================================
-# PAGE 1 - PREDICTOR
-# =================================================
-
-if page == "חיזוי הכנסות":
-
-    st.markdown(
-        '<div class="title">🎬 חוזה הכנסות של סרטים</div>',
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        '<div class="subtitle">תן לי דירוג ממוצע ותקציב התחלתי של סרט ואני אחזה לך כמה הכנסות יש לו</div>',
-        unsafe_allow_html=True
-    )
-
-    # Input
-
-    budget_text = st.text_input(
-        "💰 הכנס את התקציב ההתחלתי",
-        value="50000000"
-    )
-
-    votes = st.number_input(
-        "⭐ הכנס את הדירוג הממוצע",
-        min_value=1.0,
-        max_value=10.0,
-        value=5.0,
-        step=0.1
-    )
-
-    # Validation
-
-    try:
-        budget = int(budget_text)
-        budget_valid = 1 <= budget <= MAX_BUDGET
-    except ValueError:
-        budget = 0
-        budget_valid = False
-
-    # Prediction
-
-    if not budget_valid:
-
-        st.error("❌ התקציב חייב להיות מספר שלם בין 1 למקסימום שהוגדר")
-
-    else:
-
-        prediction = budget * w_budget + votes * w_votes + b
-
-        st.success("✅ הנתונים תקינים")
+prediction = budget*w_budget+votes*w_votes+b
+st.write("ההכנסות החזויות של הסרט הן:", prediction, "$")
+
+# MAX_BUDGET = 99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+
+# # -------------------------
+# # Custom CSS
+# # -------------------------
+# st.markdown("""
+# <style>
+#     .main {
+#         background-color: #f5f7fb;
+#     }
+
+#     .title {
+#         text-align: center;
+#         color: #1f2937;
+#         font-size: 42px;
+#         font-weight: bold;
+#         margin-bottom: 10px;
+#     }
+
+#     .subtitle {
+#         text-align: center;
+#         color: #6b7280;
+#         font-size: 18px;
+#         margin-bottom: 30px;
+#     }
+
+#     .result {
+#         background-color: #e8f5e9;
+#         padding: 20px;
+#         border-radius: 12px;
+#         text-align: center;
+#         font-size: 24px;
+#         font-weight: bold;
+#         color: #166534;
+#     }
+# </style>
+# """, unsafe_allow_html=True)
+
+# # -------------------------
+# # Navigation
+# # -------------------------
+# st.sidebar.title("🎬 Movie Project")
+
+# page = st.sidebar.radio(
+#     "בחר עמוד:",
+#     ["חיזוי הכנסות", "🎮 נצח את המודל"]
+# )
+
+# # =================================================
+# # PAGE 1 - PREDICTOR
+# # =================================================
+
+# if page == "חיזוי הכנסות":
+
+#     st.markdown(
+#         '<div class="title">🎬 חוזה הכנסות של סרטים</div>',
+#         unsafe_allow_html=True
+#     )
+
+#     st.markdown(
+#         '<div class="subtitle">תן לי דירוג ממוצע ותקציב התחלתי של סרט ואני אחזה לך כמה הכנסות יש לו</div>',
+#         unsafe_allow_html=True
+#     )
+
+#     # Input
+
+#     budget_text = st.text_input(
+#         "💰 הכנס את התקציב ההתחלתי",
+#         value="50000000"
+#     )
+
+#     votes = st.number_input(
+#         "⭐ הכנס את הדירוג הממוצע",
+#         min_value=1.0,
+#         max_value=10.0,
+#         value=5.0,
+#         step=0.1
+#     )
+
+#     # Validation
+
+#     try:
+#         budget = int(budget_text)
+#         budget_valid = 1 <= budget <= MAX_BUDGET
+#     except ValueError:
+#         budget = 0
+#         budget_valid = False
+
+#     # Prediction
+
+#     if not budget_valid:
+
+#         st.error("❌ התקציב חייב להיות מספר שלם בין 1 למקסימום שהוגדר")
+
+#     else:
+
+#         prediction = budget * w_budget + votes * w_votes + b
 
-        st.markdown(
-            f"""
-            <div class="result">
-                💰 ההכנסות החזויות הן<br>
-                {prediction:,.2f}$
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+#         st.success("✅ הנתונים תקינים")
 
-# =================================================
-# PAGE 2 - BEAT THE MODEL GAME
-# =================================================
+#         st.markdown(
+#             f"""
+#             <div class="result">
+#                 💰 ההכנסות החזויות הן<br>
+#                 {prediction:,.2f}$
+#             </div>
+#             """,
+#             unsafe_allow_html=True
+#         )
 
-elif page == "🎮 נצח את המודל":
+# # =================================================
+# # PAGE 2 - BEAT THE MODEL GAME
+# # =================================================
 
-    st.markdown(
-        '<div class="title">🏆 Beat the Model</div>',
-        unsafe_allow_html=True
-    )
+# elif page == "🎮 נצח את המודל":
 
-    st.markdown(
-        '<div class="subtitle">האם אתה יכול לנצח את הבינה המלאכותית?</div>',
-        unsafe_allow_html=True
-    )
+#     st.markdown(
+#         '<div class="title">🏆 Beat the Model</div>',
+#         unsafe_allow_html=True
+#     )
 
-    st.write(
-        "במשחק הזה אתה והמודל מנסים לחזות את ההכנסות של סרט."
-    )
+#     st.markdown(
+#         '<div class="subtitle">האם אתה יכול לנצח את הבינה המלאכותית?</div>',
+#         unsafe_allow_html=True
+#     )
 
-    st.divider()
+#     st.write(
+#         "במשחק הזה אתה והמודל מנסים לחזות את ההכנסות של סרט."
+#     )
 
-    # Movie data
+#     st.divider()
 
-    st.subheader("🎬 נתוני הסרט")
+#     # Movie data
 
-    game_budget_text = st.text_input(
-        "💰 תקציב הסרט בדולרים",
-        value="50000000",
-        key="game_budget"
-    )
+#     st.subheader("🎬 נתוני הסרט")
 
-    game_votes = st.number_input(
-        "⭐ דירוג הסרט",
-        min_value=1.0,
-        max_value=10.0,
-        value=8.0,
-        step=0.1,
-        key="game_votes"
-    )
+#     game_budget_text = st.text_input(
+#         "💰 תקציב הסרט בדולרים",
+#         value="50000000",
+#         key="game_budget"
+#     )
 
-    try:
-        game_budget = int(game_budget_text)
-        game_budget_valid = 1 <= game_budget <= MAX_BUDGET
-    except ValueError:
-        game_budget = 0
-        game_budget_valid = False
+#     game_votes = st.number_input(
+#         "⭐ דירוג הסרט",
+#         min_value=1.0,
+#         max_value=10.0,
+#         value=8.0,
+#         step=0.1,
+#         key="game_votes"
+#     )
 
-    st.divider()
+#     try:
+#         game_budget = int(game_budget_text)
+#         game_budget_valid = 1 <= game_budget <= MAX_BUDGET
+#     except ValueError:
+#         game_budget = 0
+#         game_budget_valid = False
 
-    # User guess
+#     st.divider()
 
-    st.subheader("🤔 מה לדעתך יהיו ההכנסות?")
+#     # User guess
 
-    user_guess_text = st.text_input(
-        "הכנס את הניחוש שלך בדולרים (אפשר גם מספר שלילי)",
-        value="100000000",
-        key="user_guess"
-    )
+#     st.subheader("🤔 מה לדעתך יהיו ההכנסות?")
 
-    # Real revenue
+#     user_guess_text = st.text_input(
+#         "הכנס את הניחוש שלך בדולרים (אפשר גם מספר שלילי)",
+#         value="100000000",
+#         key="user_guess"
+#     )
 
-    st.subheader("📊 מה היו ההכנסות האמיתיות?")
+#     # Real revenue
 
-    real_revenue_text = st.text_input(
-        "הכנס את ההכנסות האמיתיות של הסרט בדולרים",
-        value="120000000",
-        key="real_revenue"
-    )
+#     st.subheader("📊 מה היו ההכנסות האמיתיות?")
 
-    # Check button
+#     real_revenue_text = st.text_input(
+#         "הכנס את ההכנסות האמיתיות של הסרט בדולרים",
+#         value="120000000",
+#         key="real_revenue"
+#     )
 
-    if st.button("🏆 בדוק מי ניצח!", use_container_width=True):
+#     # Check button
 
-        try:
+#     if st.button("🏆 בדוק מי ניצח!", use_container_width=True):
 
-            user_guess = int(user_guess_text)
-            real_revenue = int(real_revenue_text)
+#         try:
 
-            if not game_budget_valid:
+#             user_guess = int(user_guess_text)
+#             real_revenue = int(real_revenue_text)
 
-                st.error("❌ התקציב חייב להיות מספר שלם וחיובי בטווח המותר")
+#             if not game_budget_valid:
 
-            elif real_revenue < 0:
+#                 st.error("❌ התקציב חייב להיות מספר שלם וחיובי בטווח המותר")
 
-                st.error("❌ ההכנסות האמיתיות לא יכולות להיות שליליות")
+#             elif real_revenue < 0:
 
-            else:
+#                 st.error("❌ ההכנסות האמיתיות לא יכולות להיות שליליות")
 
-                # Model prediction
+#             else:
 
-                model_prediction = (
-                    game_budget * w_budget
-                    + game_votes * w_votes
-                    + b
-                )
+#                 # Model prediction
 
-                # Calculate errors
+#                 model_prediction = (
+#                     game_budget * w_budget
+#                     + game_votes * w_votes
+#                     + b
+#                 )
 
-                user_error = abs(user_guess - real_revenue)
+#                 # Calculate errors
 
-                model_error = abs(
-                    model_prediction - real_revenue
-                )
+#                 user_error = abs(user_guess - real_revenue)
 
-                st.divider()
+#                 model_error = abs(
+#                     model_prediction - real_revenue
+#                 )
 
-                st.subheader("📈 תוצאות המשחק")
+#                 st.divider()
 
-                col1, col2 = st.columns(2)
+#                 st.subheader("📈 תוצאות המשחק")
 
-                with col1:
+#                 col1, col2 = st.columns(2)
 
-                    st.metric(
-                        "הניחוש שלך",
-                        f"${user_guess:,.2f}",
-                        f"טעות: ${user_error:,.2f}"
-                    )
+#                 with col1:
 
-                with col2:
+#                     st.metric(
+#                         "הניחוש שלך",
+#                         f"${user_guess:,.2f}",
+#                         f"טעות: ${user_error:,.2f}"
+#                     )
 
-                    st.metric(
-                        "תחזית המודל",
-                        f"${model_prediction:,.2f}",
-                        f"טעות: ${model_error:,.2f}"
-                    )
+#                 with col2:
 
-                st.write(
-                    f"**ההכנסות האמיתיות:** ${real_revenue:,.2f}"
-                )
+#                     st.metric(
+#                         "תחזית המודל",
+#                         f"${model_prediction:,.2f}",
+#                         f"טעות: ${model_error:,.2f}"
+#                     )
 
-                st.divider()
+#                 st.write(
+#                     f"**ההכנסות האמיתיות:** ${real_revenue:,.2f}"
+#                 )
 
-                # Winner
+#                 st.divider()
 
-                if user_error < model_error:
+#                 # Winner
 
-                    st.balloons()
+#                 if user_error < model_error:
 
-                    st.success(
-                        "🎉 ניצחת את המודל! אתה היית קרוב יותר!"
-                    )
+#                     st.balloons()
 
-                elif model_error < user_error:
+#                     st.success(
+#                         "🎉 ניצחת את המודל! אתה היית קרוב יותר!"
+#                     )
 
-                    st.error(
-                        "🤖 המודל ניצח! התחזית שלו הייתה קרובה יותר."
-                    )
+#                 elif model_error < user_error:
 
-                else:
+#                     st.error(
+#                         "🤖 המודל ניצח! התחזית שלו הייתה קרובה יותר."
+#                     )
 
-                    st.info(
-                        "🤝 תיקו! אתה והמודל הייתם באותו מרחק מהתוצאה האמיתית."
-                    )
+#                 else:
 
-        except ValueError:
+#                     st.info(
+#                         "🤝 תיקו! אתה והמודל הייתם באותו מרחק מהתוצאה האמיתית."
+#                     )
 
-            st.error(
-                "❌ יש להזין מספרים שלמים ותקינים בכל השדות"
-            )
+#         except ValueError:
+
+#             st.error(
+#                 "❌ יש להזין מספרים שלמים ותקינים בכל השדות"
+#             )

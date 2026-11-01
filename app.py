@@ -1,5 +1,6 @@
+
 import streamlit as st
-st.header("amit project")
+
 # -------------------------
 # Page settings
 # -------------------------
@@ -8,6 +9,8 @@ st.set_page_config(
     page_icon="🎬",
     layout="centered"
 )
+
+st.header("amit project")
 
 # -------------------------
 # Custom CSS
@@ -49,7 +52,7 @@ st.markdown("""
 # Title
 # -------------------------
 st.markdown(
-    '<div class="title">🎬חוזה הכנסות של סרטים</div>',
+    '<div class="title">🎬 חוזה הכנסות של סרטים</div>',
     unsafe_allow_html=True
 )
 
@@ -62,13 +65,11 @@ st.markdown(
 # Input
 # -------------------------
 
-budget = st.number_input(
-    "⭐ הכנס את התקציב ההתחלתי",
-    min_value=0.0,
-    max_value=99999999999999999.0,
-    value=5.0,
-    step=1000.0
+budget_text = st.text_input(
+    "💰 הכנס את התקציב ההתחלתי",
+    value="50000000"
 )
+
 votes = st.number_input(
     "⭐ הכנס את הדירוג הממוצע",
     min_value=1.0,
@@ -80,25 +81,38 @@ votes = st.number_input(
 # -------------------------
 # Model
 # -------------------------
+
 w_budget = 17750549.77157962
 w_votes = 2.8742058244586395
+b = -109360178.61238256
 
-b= -109360178.61238256
-
-
-prediction= budget*w_budget+votes*w_votes+b
-
-
-
+MAX_BUDGET = 999999999999999999999999999999999999999999
 
 # -------------------------
-# Result
+# Validation
 # -------------------------
-if  votes< 1 or votes > 10:
+
+try:
+    budget = int(budget_text)
+    budget_valid = 1 <= budget <= MAX_BUDGET
+except ValueError:
+    budget = 0
+    budget_valid = False
+
+# -------------------------
+# Prediction
+# -------------------------
+
+if not budget_valid:
+    st.error("❌ התקציב חייב להיות מספר שלם בין 1 למקסימום שהוגדר")
+
+elif not 1 <= votes <= 10:
     st.error("❌ הדירוג חייב להיות בין 1 ל-10")
 
 else:
-    st.success("✅ דירוג תקין")
+    prediction = budget * w_budget + votes * w_votes + b
+
+    st.success("✅ הנתונים תקינים")
 
     st.markdown(
         f"""
@@ -109,15 +123,3 @@ else:
         """,
         unsafe_allow_html=True
     )
-if  budget< 0 or budget > 999999999999999999999999999999999999999999999999999999999999999999:
-    st.error("❌ התקציב חייב להיות בין 1 ל-999999999999999999999999999999999999999999999999999999999999999999")
-
-else:
-    st.success("✅ תקציב תקין")
-
-    st.markdown(
-        f"""
-        """,
-        unsafe_allow_html=True
-    )
-

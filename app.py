@@ -1,60 +1,68 @@
-import os
-import pandas as pd
+import random
 import streamlit as st
-import kagglehub
 
-st.title("🎮 נצח את המודל! (נתונים אמיתיים)")
+st.title("🎮 נצח את המודל!")
 
 # מקדמי המודל
 W_BUDGET = 17750549.77157962
 W_VOTES = 2.8742058244586395
 B = -109360178.61238256
 
+# 20 הסרטים מהדאטה שלך (תקציב, דירוג, הכנסות אמת)
+DATASET = [
+    {"votes": 7.2, "budget": 237000000, "actual": 2787965087},
+    {"votes": 6.9, "budget": 300000000, "actual": 961000000},
+    {"votes": 6.3, "budget": 245000000, "actual": 880674609},
+    {"votes": 7.6, "budget": 250000000, "actual": 1084939099},
+    {"votes": 6.1, "budget": 260000000, "actual": 284139100},
+    {"votes": 5.9, "budget": 258000000, "actual": 890871626},
+    {"votes": 7.4, "budget": 260000000, "actual": 591794936},
+    {"votes": 7.3, "budget": 280000000, "actual": 1405403694},
+    {"votes": 7.4, "budget": 250000000, "actual": 933959197},
+    {"votes": 5.7, "budget": 250000000, "actual": 873260194},
+    {"votes": 5.4, "budget": 270000000, "actual": 391081192},
+    {"votes": 6.1, "budget": 200000000, "actual": 586090727},
+    {"votes": 7.0, "budget": 200000000, "actual": 1065659812},
+    {"votes": 5.9, "budget": 255000000, "actual": 89289910},
+    {"votes": 6.5, "budget": 225000000, "actual": 662845518},
+    {"votes": 6.3, "budget": 225000000, "actual": 419651413},
+    {"votes": 7.4, "budget": 220000000, "actual": 1519557910},
+    {"votes": 6.4, "budget": 380000000, "actual": 1045713802},
+    {"votes": 6.2, "budget": 225000000, "actual": 624026776},
+    {"votes": 7.1, "budget": 250000000, "actual": 956019788},
+]
 
-# 1. טעינת נתונים אמיתיים מ-Kaggle
-@st.cache_data
-def load_data():
-    path = kagglehub.dataset_download("tmdb/tmdb-movie-metadata")
-    csv_path = os.path.join(path, "tmdb_5000_movies.csv")
-    df = pd.read_csv(csv_path)
+# בחירת סרט אקראי מתוך הרשימה
+if "movie_idx" not in st.session_state:
+    st.session_state.movie_idx = random.randint(0, len(DATASET) - 1)
 
-    # סינון סרטים שיש לגביהם מידע תקין על תקציב והכנסות
-    clean_df = df[(df["budget"] > 0) & (df["revenue"] > 0)]
-    return clean_df
+if st.button("🎲 בחר סרט חדש"):
+    st.session_state.movie_idx = random.randint(0, len(DATASET) - 1)
 
+current_movie = DATASET[st.session_state.movie_idx]
 
-df = load_data()
+# הצגת נתוני הסרט
+st.write(f"**תקציב הסרט:** ${current_movie['budget']:,}")
+st.write(f"**דירוג הצופים:** {current_movie['votes']} / 10")
 
-# 2. בחירת סרט אקראי
-if "current_movie" not in st.session_state:
-    st.session_state.current_movie = df.sample(1).iloc[0]
-
-if st.button("🎲 בחר סרט חדש מהדאטה"):
-    st.session_state.current_movie = df.sample(1).iloc[0]
-
-movie = st.session_state.current_movie
-
-# הצגת נתוני הסרט הנבחר
-st.write(f"### סרט: {movie['title']}")
-st.write(f"**תקציב:** ${movie['budget']:,}")
-st.write(f"**דירוג צופים:** {movie['vote_average']} / 10")
-
-# 3. ניחוש השחקן
+# ניחוש השחקן
 player_guess = st.number_input(
     "מה לדעתך היו ההכנסות האמיתיות של הסרט ($)?",
     min_value=0.0,
-    step=1000000.0,
+    step=10000000.0,
 )
 
 if st.button("בדוק מי ניצח"):
-    actual = movie["revenue"]
-    model_pred = movie["budget"] * W_BUDGET + movie["vote_average"] * W_VOTES + B
+    actual = current_movie["actual"]
+    model_pred = (
+        current_movie["budget"] * W_BUDGET + current_movie["votes"] * W_VOTES + B
+    )
 
     player_error = abs(player_guess - actual)
     model_error = abs(model_pred - actual)
 
     st.write("---")
-    st.write(f"**הכנסות אמת (מהקובץ):** ${actual:,.2f}")
+    st.write(f"**הכנסות אמת:** ${actual:,.2f}")
     st.write(f"**תחזית המודל:** ${model_pred:,.2f}")
     st.write(f"**הניחוש שלך:** ${player_guess:,.2f}")
 

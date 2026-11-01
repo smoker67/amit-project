@@ -1,8 +1,8 @@
 
 import streamlit as st
 
-budget = st.number_input("הכנס תקציב לסרט")
-votes = st.number_input("הכנס דירוג ממוצע לסרט")
+budget = st.number_input("הכנס תקציב לסרט(מספר חיובי)")
+votes = st.number_input("הכנס דירוג ממוצע לסרט בין 1-10")
 
 
 # -------------------------
